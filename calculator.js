@@ -45,6 +45,6 @@ document.getElementById('calculator-keys').addEventListener('click', (event) => 
         action = event.target.dataset.action;
 
     if (action) {
-        actions[action](a, b);
+        output(actions[action](a, b));
     }
 })
