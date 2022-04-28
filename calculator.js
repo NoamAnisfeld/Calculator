@@ -24,7 +24,27 @@ function output(str) {
     document.getElementById('calculator__result').textContent = str;
 }
 
-document.getElementById('argument1').focus();
+function isDigit(char) {
+    return typeof char === 'string' &&
+            char.length === 1 &&
+            /[0-9]/.test(char);
+}
+
+function listenToInput(element) {
+    element.addEventListener('keypress', event => {
+        let key = event.key;
+
+        if (isDigit(key)) {
+            element.style.backgroundColor = '#0F0';
+        } else {
+            element.style.backgroundColor = '#F00';
+        }
+    })
+}
+
+let inputElement = document.getElementById('calculator__input');
+inputElement.focus();
+listenToInput(inputElement);
 
 document.getElementById('calculator__keys').addEventListener('click', (event) => {
     let
