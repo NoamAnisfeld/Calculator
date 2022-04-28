@@ -6,10 +6,6 @@ document.documentElement.addEventListener('keypress', (event) => {
             location.reload(true /* bypass catch on Firefox */);
         }
     }
-
-    if (event.key === 'Enter') {
-        document.getElementById('calculate').click();
-    }
 })
 
 const actions = {
@@ -20,39 +16,71 @@ const actions = {
     power: (a, b) => Math.pow(a, b)
 }
 
-function output(str) {
-    document.getElementById('calculator__result').textContent = str;
-}
-
-function isDigit(char) {
-    return typeof char === 'string' &&
-            char.length === 1 &&
-            /[0-9]/.test(char);
-}
-
-function listenToInput(element) {
-    element.addEventListener('keypress', event => {
-        let key = event.key;
-
-        if (isDigit(key)) {
-            element.style.backgroundColor = '#0F0';
-        } else {
-            element.style.backgroundColor = '#F00';
+class CalculatorInput {
+    constructor(inputElement) {
+        if (!inputElement instanceof HTMLElement) {
+            throw '"new CalculatorInput" has been called with an ' + 
+                'invalid argument. Must be called with an HTML element.';
         }
-    })
+
+        let
+            storedArgument,
+            argument = 0,
+            strRepresentation = '0',
+            operation;
+
+        const outputValue = inputElement.value !== undefined ?
+            (val) => { inputElement.value = val; } :
+            (val) => { inputElement.textContent = val; } ;
+
+        inputElement.addEventListener('keypress', event => {
+            event.preventDefault();
+            let key = event.key;
+
+            if (/[0-9]/.test(key)) {
+                event.currentTarget.style.backgroundColor = null;
+                if (strRepresentation === '0') {
+                    strRepresentation = key;
+                } else {
+                    strRepresentation += key;
+                }
+                argument = Number(strRepresentation);
+                outputValue(strRepresentation);
+                console.log(`argument is ${argument}`);
+                console.log(`strRepresentation is ${strRepresentation}`);
+            } else if (key === '.' && !strRepresentation.includes('.')) {
+                strRepresentation += key;
+                argument = Number(strRepresentation);
+            } else if (/[\+\-\*Xx\/\^]/.test(key)) {
+                // toDo: handle subsequent operation inputs
+
+                storedArgument = argument;
+                argument = 0;
+                strRepresentation = '0';
+                operation = {
+                    '+': 'add',
+                    '-': 'subtract',
+                    'X': 'multiply',
+                    'x': this.X,
+                    '*': this.X,
+                    '/': 'divide',
+                    '^': 'power'
+                }[key];
+            } else if (key === '=' || key === 'Enter') {
+                if (operation) {
+                    let result = actions[operation](storedArgument, argument);
+                    storedArgument = argument;
+                    argument = result;
+                    strRepresentation = result.toString();
+                    outputValue(strRepresentation);
+                }
+            } else {
+                event.currentTarget.style.backgroundColor = '#F00';
+            }
+        });
+    }
 }
 
 let inputElement = document.getElementById('calculator__input');
 inputElement.focus();
-listenToInput(inputElement);
-
-document.getElementById('calculator__keys').addEventListener('click', (event) => {
-    let
-        a = Number(document.getElementById('argument1').value),
-        b = Number(document.getElementById('argument2').value),
-        action = event.target.dataset.action;
-
-    if (action) {
-        output(actions[action](a, b));
-    }
-})
+new CalculatorInput(inputElement);
