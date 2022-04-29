@@ -1,86 +1,114 @@
+"use strict"
+
 const DEBUG = true;
 
-document.documentElement.addEventListener('keypress', (event) => {
-    if (DEBUG) {
+if (DEBUG) {
+    document.documentElement.addEventListener('keypress', (event) => {
         if (event.key === 'z' || event.key === 'Z') {
             location.reload(true /* bypass catch on Firefox */);
         }
-    }
-})
+    })
+};
 
-const actions = {
+const calc = Object.freeze({
     add: (a, b) => a + b,    
     subtract: (a, b) => a - b,
     multiply: (a, b) => a * b,
     divide: (a, b) => a / b,
     power: (a, b) => Math.pow(a, b)
-}
+});
 
-class CalculatorInput {
-    constructor(inputElement) {
-        if (!inputElement instanceof HTMLElement) {
-            throw '"new CalculatorInput" has been called with an ' + 
-                'invalid argument. Must be called with an HTML element.';
+class Tokenizer {
+    static #operationsMap = {
+        '+': 'add',
+        '-': 'subtract',
+        '*': 'multiply',
+        'X': this['*'],
+        'x': this['*'],
+        '/': 'divide',
+        '^': 'power',
+    }
+
+    constructor() {
+        this.reset();
+    }
+
+    reset() {
+        this.#prevToken = null;
+        this.#curToken = '0';
+        this.#operation = null;
+        this.#expectNewInput = true;
+    }
+
+    getActiveToken() {
+        return this.#curToken;
+    }
+
+    #performOperation() {
+        if (this.#operation && this.#prevToken !== null) {
+            return calc[this.#operation](
+                Number(this.#prevToken),
+                Number(this.#curToken)
+            ).toString();
+        } else {
+            return this.#curToken;
         }
+    }
 
-        let
-            storedArgument,
-            argument = 0,
-            strRepresentation = '0',
-            operation;
-
-        const outputValue = inputElement.value !== undefined ?
-            (val) => { inputElement.value = val; } :
-            (val) => { inputElement.textContent = val; } ;
-
-        inputElement.addEventListener('keypress', event => {
-            event.preventDefault();
-            let key = event.key;
-
-            if (/[0-9]/.test(key)) {
-                event.currentTarget.style.backgroundColor = null;
-                if (strRepresentation === '0') {
-                    strRepresentation = key;
-                } else {
-                    strRepresentation += key;
-                }
-                argument = Number(strRepresentation);
-                outputValue(strRepresentation);
-                console.log(`argument is ${argument}`);
-                console.log(`strRepresentation is ${strRepresentation}`);
-            } else if (key === '.' && !strRepresentation.includes('.')) {
-                strRepresentation += key;
-                argument = Number(strRepresentation);
-            } else if (/[\+\-\*Xx\/\^]/.test(key)) {
-                // toDo: handle subsequent operation inputs
-
-                storedArgument = argument;
-                argument = 0;
-                strRepresentation = '0';
-                operation = {
-                    '+': 'add',
-                    '-': 'subtract',
-                    'X': 'multiply',
-                    'x': this.X,
-                    '*': this.X,
-                    '/': 'divide',
-                    '^': 'power'
-                }[key];
-            } else if (key === '=' || key === 'Enter') {
-                if (operation) {
-                    let result = actions[operation](storedArgument, argument);
-                    storedArgument = argument;
-                    argument = result;
-                    strRepresentation = result.toString();
-                    outputValue(strRepresentation);
-                }
+    serialize(char) {
+        if (/[0-9]/.test(char)) {
+            if (this.#expectNewInput) {
+                this.#curToken = char;
+                this.#expectNewInput = false;
+            } else if (this.#curToken === '0') {
+                this.#curToken = char;
             } else {
-                event.currentTarget.style.backgroundColor = '#F00';
+                this.#curToken += char;
             }
-        });
+        } else if (char === '.') {
+            if (this.#expectNewInput) {
+                this.#curToken = '0.';
+                this.#expectNewInput = false;
+            } else if (!this.#curToken.includes('.')) {
+                this.#curToken += '.';
+            } else {
+                throw `${this.constructor.name}: Attempt to add a second decimal dot in the same number`;
+            }
+        } else if (char === '=') {
+            // TODO: Handle subsequent '=' (repeating last operation)
+
+            this.#curToken = this.#performOperation();
+            this.#prevToken = null;
+            this.#operation = null;
+            this.#expectNewInput = true;
+        } else if (Object.keys(this.#operationsMap).includes(char)) {
+            // TODO: Handle subsequent operators (replacing operation)
+
+            if (this.#operation) {
+                this.#curToken = this.#performOperation();
+                this.#prevToken = this.#curToken;
+                this.#operation = this.#operationsMap[char];
+                this.#expectNewInput = true;
+            } else {
+                this.#prevToken = this.#curToken;
+                this.#operation = this.#operationsMap[char];
+                this.#expectNewInput = true;
+            }
+        } else {
+            throw `${this.constructor.name}: Unrecognized character`;
+        }
     }
 }
 
+const tokenizer = new Tokenizer;
+
 let inputElement = document.getElementById('calculator__input');
 inputElement.focus();
-new CalculatorInput(inputElement);
+inputElement.addEventListener('keypress', event => {
+    try {
+        tokenizer.serialize(event.key);
+        console.log(tokenizer.getActiveToken());
+    } catch (err) {
+        console.error(err);
+    }
+});
