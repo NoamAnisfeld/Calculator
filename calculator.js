@@ -19,6 +19,11 @@ const calc = Object.freeze({
 });
 
 class Tokenizer {
+    #prevToken
+    #curToken
+    #operation
+    #expectNewInput
+
     static #operationsMap = {
         '+': 'add',
         '-': 'subtract',
@@ -81,17 +86,17 @@ class Tokenizer {
             this.#prevToken = null;
             this.#operation = null;
             this.#expectNewInput = true;
-        } else if (Object.keys(this.#operationsMap).includes(char)) {
+        } else if (Object.keys(Tokenizer.#operationsMap).includes(char)) {
             // TODO: Handle subsequent operators (replacing operation)
 
             if (this.#operation) {
                 this.#curToken = this.#performOperation();
                 this.#prevToken = this.#curToken;
-                this.#operation = this.#operationsMap[char];
+                this.#operation = Tokenizer.#operationsMap[char];
                 this.#expectNewInput = true;
             } else {
                 this.#prevToken = this.#curToken;
-                this.#operation = this.#operationsMap[char];
+                this.#operation = Tokenizer.#operationsMap[char];
                 this.#expectNewInput = true;
             }
         } else {
