@@ -108,12 +108,15 @@ class Tokenizer {
 const tokenizer = new Tokenizer;
 
 let inputElement = document.getElementById('calculator__input');
+let outputElement = document.getElementById('calculator__result');
 inputElement.focus();
 inputElement.addEventListener('keypress', event => {
     try {
         tokenizer.serialize(event.key);
         console.log(tokenizer.getActiveToken());
+        outputElement.textContent = tokenizer.getActiveToken();
     } catch (err) {
         console.error(err);
+        outputElement.innerHTML = `<span style="background:red;">${err}</span>`;
     }
 });
