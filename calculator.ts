@@ -5,6 +5,7 @@ const DEBUG = true;
 if (DEBUG) {
     document.documentElement.addEventListener('keypress', (event) => {
         if (event.key === 'z' || event.key === 'Z') {
+            // @ts-ignore
             location.reload(true /* bypass catch on Firefox */);
         }
     })
