@@ -9,14 +9,14 @@ if (DEBUG) {
     });
 }
 ;
-const calc = Object.freeze({
+const calculatorActions = Object.freeze({
     add: (a, b) => a + b,
     subtract: (a, b) => a - b,
     multiply: (a, b) => a * b,
     divide: (a, b) => a / b,
     power: (a, b) => Math.pow(a, b)
 });
-class Tokenizer {
+class CalculatorTokenizer {
     #prevToken;
     #curToken;
     #operation;
@@ -25,8 +25,8 @@ class Tokenizer {
         '+': 'add',
         '-': 'subtract',
         '*': 'multiply',
-        'X': this['*'],
-        'x': this['*'],
+        'X': 'multiply',
+        'x': 'multiply',
         '/': 'divide',
         '^': 'power',
     };
@@ -34,17 +34,17 @@ class Tokenizer {
         this.reset();
     }
     reset() {
-        this.#prevToken = null;
+        this.#prevToken = '';
         this.#curToken = '0';
-        this.#operation = null;
+        this.#operation = '';
         this.#expectNewInput = true;
     }
-    getActiveToken() {
+    getCurrentStringValue() {
         return this.#curToken;
     }
     #performOperation() {
-        if (this.#operation && this.#prevToken !== null) {
-            return calc[this.#operation](Number(this.#prevToken), Number(this.#curToken)).toString();
+        if (this.#operation && this.#prevToken) {
+            return calculatorActions[this.#operation](Number(this.#prevToken), Number(this.#curToken)).toString();
         }
         else {
             return this.#curToken;
@@ -78,21 +78,21 @@ class Tokenizer {
         else if (char === '=') {
             // TODO: Handle subsequent '=' (repeating last operation)
             this.#curToken = this.#performOperation();
-            this.#prevToken = null;
-            this.#operation = null;
+            this.#prevToken = '';
+            this.#operation = '';
             this.#expectNewInput = true;
         }
-        else if (Object.keys(Tokenizer.#operationsMap).includes(char)) {
+        else if (Object.keys(CalculatorTokenizer.#operationsMap).includes(char)) {
             // TODO: Handle subsequent operators (replacing operation)
             if (this.#operation) {
                 this.#curToken = this.#performOperation();
                 this.#prevToken = this.#curToken;
-                this.#operation = Tokenizer.#operationsMap[char];
+                this.#operation = CalculatorTokenizer.#operationsMap[char];
                 this.#expectNewInput = true;
             }
             else {
                 this.#prevToken = this.#curToken;
-                this.#operation = Tokenizer.#operationsMap[char];
+                this.#operation = CalculatorTokenizer.#operationsMap[char];
                 this.#expectNewInput = true;
             }
         }
@@ -101,18 +101,27 @@ class Tokenizer {
         }
     }
 }
-const tokenizer = new Tokenizer;
-let inputElement = document.getElementById('calculator__input');
-let outputElement = document.getElementById('calculator__result');
-inputElement.focus();
-inputElement.addEventListener('keypress', event => {
-    try {
-        tokenizer.serialize(event.key);
-        console.log(tokenizer.getActiveToken());
-        outputElement.textContent = tokenizer.getActiveToken();
+function main() {
+    const tokenizer = new CalculatorTokenizer;
+    let inputElement = document.getElementById('calculator__input');
+    let outputElement = document.getElementById('calculator__result');
+    if (inputElement === null) {
+        return;
     }
-    catch (err) {
-        console.error(err);
-        outputElement.innerHTML = `<span style="background:red;">${err}</span>`;
-    }
-});
+    inputElement.focus();
+    inputElement.addEventListener('keypress', event => {
+        if (outputElement === null) {
+            return;
+        }
+        try {
+            tokenizer.serialize(event.key);
+            console.log(tokenizer.getCurrentStringValue());
+            outputElement.textContent = tokenizer.getCurrentStringValue();
+        }
+        catch (err) {
+            console.error(err);
+            outputElement.innerHTML = `<span style="background:red;">${err}</span>`;
+        }
+    });
+}
+main();
