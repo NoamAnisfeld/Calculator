@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 const DEBUG = true;
 
@@ -8,29 +8,29 @@ if (DEBUG) {
             // @ts-ignore
             location.reload(true /* bypass catch on Firefox */);
         }
-    })
+    });
 };
 
-const calc = Object.freeze({
-    add: (a, b) => a + b,    
-    subtract: (a, b) => a - b,
-    multiply: (a, b) => a * b,
-    divide: (a, b) => a / b,
-    power: (a, b) => Math.pow(a, b)
+const calculatorActions = Object.freeze({
+    add: (a: number, b: number) => a + b,
+    subtract: (a: number, b: number) => a - b,
+    multiply: (a: number, b: number) => a * b,
+    divide: (a: number, b: number) => a / b,
+    power: (a: number, b: number) => Math.pow(a, b)
 });
 
-class Tokenizer {
-    #prevToken
-    #curToken
-    #operation
-    #expectNewInput
+class CalculatorTokenizer {
+    #prevToken: string
+    #curToken: string
+    #operation: string
+    #expectNewInput: boolean
 
     static #operationsMap = {
         '+': 'add',
         '-': 'subtract',
         '*': 'multiply',
-        'X': this['*'],
-        'x': this['*'],
+        'X': 'multiply',
+        'x': 'multiply',
         '/': 'divide',
         '^': 'power',
     }
@@ -40,19 +40,19 @@ class Tokenizer {
     }
 
     reset() {
-        this.#prevToken = null;
+        this.#prevToken = '';
         this.#curToken = '0';
-        this.#operation = null;
+        this.#operation = '';
         this.#expectNewInput = true;
     }
 
-    getActiveToken() {
+    getCurrentStringValue(): string {
         return this.#curToken;
     }
 
-    #performOperation() {
-        if (this.#operation && this.#prevToken !== null) {
-            return calc[this.#operation](
+    #performOperation(): string {
+        if (this.#operation && this.#prevToken) {
+            return calculatorActions[this.#operation](
                 Number(this.#prevToken),
                 Number(this.#curToken)
             ).toString();
@@ -61,7 +61,7 @@ class Tokenizer {
         }
     }
 
-    serialize(char) {
+    serialize(char: string): void {
         if (/[0-9]/.test(char)) {
             if (this.#expectNewInput) {
                 this.#curToken = char;
@@ -84,20 +84,20 @@ class Tokenizer {
             // TODO: Handle subsequent '=' (repeating last operation)
 
             this.#curToken = this.#performOperation();
-            this.#prevToken = null;
-            this.#operation = null;
+            this.#prevToken = '';
+            this.#operation = '';
             this.#expectNewInput = true;
-        } else if (Object.keys(Tokenizer.#operationsMap).includes(char)) {
+        } else if (Object.keys(CalculatorTokenizer.#operationsMap).includes(char)) {
             // TODO: Handle subsequent operators (replacing operation)
 
             if (this.#operation) {
                 this.#curToken = this.#performOperation();
                 this.#prevToken = this.#curToken;
-                this.#operation = Tokenizer.#operationsMap[char];
+                this.#operation = CalculatorTokenizer.#operationsMap[char];
                 this.#expectNewInput = true;
             } else {
                 this.#prevToken = this.#curToken;
-                this.#operation = Tokenizer.#operationsMap[char];
+                this.#operation = CalculatorTokenizer.#operationsMap[char];
                 this.#expectNewInput = true;
             }
         } else {
@@ -106,18 +106,29 @@ class Tokenizer {
     }
 }
 
-const tokenizer = new Tokenizer;
+function main(): void {
+    const tokenizer = new CalculatorTokenizer;
 
-let inputElement = document.getElementById('calculator__input');
-let outputElement = document.getElementById('calculator__result');
-inputElement.focus();
-inputElement.addEventListener('keypress', event => {
-    try {
-        tokenizer.serialize(event.key);
-        console.log(tokenizer.getActiveToken());
-        outputElement.textContent = tokenizer.getActiveToken();
-    } catch (err) {
-        console.error(err);
-        outputElement.innerHTML = `<span style="background:red;">${err}</span>`;
+    let inputElement = document.getElementById('calculator__input');
+    let outputElement = document.getElementById('calculator__result');
+
+    if (inputElement === null) {
+        return;
     }
-});
+    inputElement.focus();
+    inputElement.addEventListener('keypress', event => {
+        if (outputElement === null) {
+            return;
+        }
+        try {
+            tokenizer.serialize(event.key);
+            console.log(tokenizer.getCurrentStringValue());
+            outputElement.textContent = tokenizer.getCurrentStringValue();
+        } catch (err) {
+            console.error(err);
+            outputElement.innerHTML = `<span style="background:red;">${err}</span>`;
+        }
+    });
+}
+
+main();
