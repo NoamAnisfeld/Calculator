@@ -8,8 +8,16 @@ if (DEBUG) {
         }
     });
 }
+function validatePrototype(object, prototype) {
+    if (object instanceof prototype) {
+        return object;
+    }
+    else {
+        return null;
+    }
+}
 function main() {
-    const calculatorEngine = new CalculatorEngine, calculatorUI = document.querySelector(".calculator-wrapper"), inputElement = calculatorUI?.querySelector('input[type="text"]');
+    const calculatorEngine = new CalculatorEngine, calculatorUI = document.querySelector(".calculator-wrapper"), inputElement = validatePrototype(calculatorUI?.querySelector('input[type="text"]'), HTMLInputElement), yairModeSwitch = validatePrototype(document.querySelector('input#yair-mode'), HTMLInputElement);
     if (!calculatorUI || !inputElement) {
         return;
     }
@@ -17,7 +25,12 @@ function main() {
         const target = event.target, dataset = target instanceof HTMLElement ? target.dataset : null, key = dataset?.key;
         if (key) {
             calculatorEngine.serialize(key);
-            inputElement.value = calculatorEngine.getCurrentStringValue();
+            if (yairModeSwitch?.checked && key !== '=' && key !== 'C') {
+                inputElement.value += key;
+            }
+            else {
+                inputElement.value = calculatorEngine.getCurrentStringValue();
+            }
         }
     });
     //     calculatorUI.addEventListener("keypress", (event) => {

@@ -11,11 +11,27 @@ if (DEBUG) {
     });
 }
 
+function validatePrototype<T>(object:T, prototype:Function): T | null {
+    if (object instanceof prototype) {
+        return object;
+    } else {
+        return null;
+    }
+}
+
 function main(): void {
     const calculatorEngine = new CalculatorEngine,
         calculatorUI = document.querySelector(".calculator-wrapper"),
 	    inputElement:HTMLInputElement | null | undefined = 
-            calculatorUI?.querySelector('input[type="text"]');
+            validatePrototype(
+                calculatorUI?.querySelector('input[type="text"]'),
+                HTMLInputElement
+            ),
+        yairModeSwitch:HTMLInputElement | null =
+            validatePrototype(
+                document.querySelector('input#yair-mode'),
+                HTMLInputElement
+            );
 
     if (!calculatorUI || !inputElement) {
         return;
@@ -28,7 +44,11 @@ function main(): void {
         
         if (key) {
             calculatorEngine.serialize(key);
-            inputElement.value = calculatorEngine.getCurrentStringValue();
+            if (yairModeSwitch?.checked && key !== '=' && key !== 'C') {
+                inputElement.value += key;
+            } else {
+                inputElement.value = calculatorEngine.getCurrentStringValue();
+            }
         }
     });
 
