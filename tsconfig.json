@@ -3,8 +3,9 @@
         "module": "commonjs",
         "target": "ESNext",
         "strictNullChecks": true,
+        "module": "ES6"
     },
     "exclude": [
         "node_modules"
     ]
-}
+}   
