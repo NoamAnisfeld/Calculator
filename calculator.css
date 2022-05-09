@@ -1,0 +1,111 @@
+:root {
+  font-size: 25px;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  background: lightblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.calculator-wrapper {
+  width: min-content;
+  margin: auto;
+  display: grid;
+  --button-size: 3ch;
+  --button-gap: 0.5ch;
+  grid-template-columns: repeat(4, calc(var(--button-size) + var(--button-gap)));
+  grid-template-areas: "display display display display" ".       .       .       divide" "k7      k8      k9      multiply" "k4      k5      k6      subtract" "k1      k2      k3      add" "k0      dot     equals  add";
+  gap: var(--button-gap);
+  padding: var(--button-gap);
+  border-width: 5px;
+  border-style: inset outset none none;
+  border-radius: 10px;
+  background: #888;
+  box-shadow: 5px -10px 5px rgba(102, 102, 102, 0.4);
+}
+
+.calculator-wrapper * {
+  font-size: inherit;
+}
+
+.calculator-input-output {
+  grid-column: span 4;
+}
+
+.calculator-wrapper [data-key="0"] {
+  grid-area: k0;
+}
+.calculator-wrapper [data-key="1"] {
+  grid-area: k1;
+}
+.calculator-wrapper [data-key="2"] {
+  grid-area: k2;
+}
+.calculator-wrapper [data-key="3"] {
+  grid-area: k3;
+}
+.calculator-wrapper [data-key="4"] {
+  grid-area: k4;
+}
+.calculator-wrapper [data-key="5"] {
+  grid-area: k5;
+}
+.calculator-wrapper [data-key="6"] {
+  grid-area: k6;
+}
+.calculator-wrapper [data-key="7"] {
+  grid-area: k7;
+}
+.calculator-wrapper [data-key="8"] {
+  grid-area: k8;
+}
+.calculator-wrapper [data-key="9"] {
+  grid-area: k9;
+}
+.calculator-wrapper [data-key="."] {
+  grid-area: dot;
+}
+.calculator-wrapper [data-key="+"] {
+  grid-area: add;
+}
+.calculator-wrapper [data-key="-"] {
+  grid-area: subtract;
+}
+.calculator-wrapper [data-key="*"] {
+  grid-area: multiply;
+}
+.calculator-wrapper [data-key="/"] {
+  grid-area: divide;
+}
+.calculator-wrapper [data-key="="] {
+  grid-area: equals;
+}
+.calculator-wrapper [data-key="+"] {
+  grid-area: add;
+}
+
+/* .calculator-digits {
+	grid-area: digits;
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	gap: var(--button-gap);
+}
+
+.calculator-operators {
+	grid-area: operators;
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	gap: var(--button-gap);
+}
+ */
+.calculator-wrapper button {
+  width: var(--button-size);
+  line-height: var(--button-size);
+}
+
+/*# sourceMappingURL=calculator.css.map */

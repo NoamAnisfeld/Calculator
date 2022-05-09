@@ -1,0 +1,99 @@
+:root {
+	font-size: 25px;
+}
+
+body {
+	height: 100%;
+	margin: 0;
+	background: lightblue;
+	display: flex;
+    flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.calculator-wrapper {
+	width: min-content;
+	margin: auto;
+	display: grid;
+	--button-size: 3ch;
+	--button-gap: 0.5ch;
+	grid-template-columns: repeat(4, calc(var(--button-size) + var(--button-gap)));
+	grid-template-areas:
+		"display display display display"
+		".       .       .       divide"
+		"k7      k8      k9      multiply"
+		"k4      k5      k6      subtract"
+		"k1      k2      k3      add"
+		"k0      dot     equals  add";
+	gap: var(--button-gap);
+	padding: var(--button-gap);
+	border-width: 5px;
+	border-style: inset outset none none;
+	border-radius: 10px;
+	background: #888;
+	box-shadow: 5px -10px 5px #6666;
+}
+
+.calculator-wrapper * {
+	font-size: inherit;
+}
+
+.calculator-input-output {
+	grid-column: span 4;
+}
+
+.calculator-wrapper {
+	@for $i from 0 through 9 {
+		& [data-key="#{$i}"] {
+			grid-area: k#{$i};
+		}
+	}
+
+	& [data-key="."] {
+		grid-area: dot;
+	}
+
+	& [data-key="+"] {
+		grid-area: add;
+	}
+
+	& [data-key="-"] {
+		grid-area: subtract;
+	}
+
+	& [data-key="*"] {
+		grid-area: multiply;
+	}
+
+	& [data-key="/"] {
+		grid-area: divide;
+	}
+
+	& [data-key="="] {
+		grid-area: equals;
+	}
+
+	& [data-key="+"] {
+		grid-area: add;
+	}
+}
+
+/* .calculator-digits {
+	grid-area: digits;
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	gap: var(--button-gap);
+}
+
+.calculator-operators {
+	grid-area: operators;
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	gap: var(--button-gap);
+}
+ */
+.calculator-wrapper button {
+	width: var(--button-size);
+	line-height: var(--button-size);
+}

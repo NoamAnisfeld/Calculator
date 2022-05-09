@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <link rel="stylesheet" href="styles.css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>A basic calculator, built for practicing JavaScript and developing tools</title>
+        <link rel="stylesheet" href="calculator.css">
         <script type="module" src="calculator.js"></script>
     </head>
     <body>
         <h1>Calculator</h1>
 
-        <div style="margin-bottom: 3em;">
-            <label>Unified input
-                <input type="text" id="calculator__input">
-            </label>
+        <div class="calculator-wrapper">
+            <input type="text" class="calculator-input-output" />
+            <button type="button" data-key="0">0</button>
+            <button type="button" data-key="1">1</button>
+            <button type="button" data-key="2">2</button>
+            <button type="button" data-key="3">3</button>
+            <button type="button" data-key="4">4</button>
+            <button type="button" data-key="5">5</button>
+            <button type="button" data-key="6">6</button>
+            <button type="button" data-key="7">7</button>
+            <button type="button" data-key="8">8</button>
+            <button type="button" data-key="9">9</button>
+            <button type="button" data-key=".">.</button>
+            <button type="button" data-key="+">+</button>
+            <button type="button" data-key="-">-</button>
+            <button type="button" data-key="*">X</button>
+            <button type="button" data-key="/">÷</button>
+            <button type="button" data-key="=">=</button>
         </div>
 
-        <section id="calculator__keys">
-            <button type="button" data-action="add">+</button>
-            <button type="button" data-action="subtract">-</button>
-            <button type="button" data-action="multiply">×</button>
-            <button type="button" data-action="divide">÷</button>
-            <button type="button" data-action="power">x<sup>y</sup></button>
-        </section>
-
-        <h2>Result</h2>
-        <div id="calculator__result"></div>
     </body>
 </html>
