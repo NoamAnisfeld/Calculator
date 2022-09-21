@@ -6,6 +6,15 @@ const calculatorActions = Object.freeze({
     divide: (a, b) => a / b,
     power: (a, b) => Math.pow(a, b)
 });
+function toStringLimitedPrecision(value) {
+    const MAX_PRECISION = 10;
+    const nativeLimitedPrecisionResult = value.toPrecision(MAX_PRECISION);
+    if (!nativeLimitedPrecisionResult.includes('.')) {
+        return nativeLimitedPrecisionResult;
+    }
+    // trim trailing zeroes and trailing dot
+    return nativeLimitedPrecisionResult.replace(/0*$/, '').replace(/\.$/, '');
+}
 class CalculatorTokenizer {
     #prevToken;
     #curToken;
@@ -34,7 +43,8 @@ class CalculatorTokenizer {
     }
     #performOperation() {
         if (this.#operation && this.#prevToken) {
-            return calculatorActions[this.#operation](Number(this.#prevToken), Number(this.#curToken)).toString();
+            const result = calculatorActions[this.#operation](Number(this.#prevToken), Number(this.#curToken));
+            return toStringLimitedPrecision(result);
         }
         else {
             return this.#curToken;

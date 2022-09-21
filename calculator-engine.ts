@@ -8,6 +8,19 @@ const calculatorActions = Object.freeze({
     power: (a: number, b: number) => Math.pow(a, b)
 });
 
+function toStringLimitedPrecision(value: number) {
+    const MAX_PRECISION = 10;
+
+    const nativeLimitedPrecisionResult = value.toPrecision(MAX_PRECISION);
+
+    if (!nativeLimitedPrecisionResult.includes('.')) {
+        return nativeLimitedPrecisionResult;
+    }
+
+    // trim trailing zeroes and trailing dot
+    return nativeLimitedPrecisionResult.replace(/0*$/, '').replace(/\.$/, '');
+}
+
 class CalculatorTokenizer {
     #prevToken: string
     #curToken: string
@@ -41,10 +54,11 @@ class CalculatorTokenizer {
 
     #performOperation(): string {
         if (this.#operation && this.#prevToken) {
-            return calculatorActions[this.#operation](
+            const result = calculatorActions[this.#operation](
                 Number(this.#prevToken),
                 Number(this.#curToken)
-            ).toString();
+            );
+            return toStringLimitedPrecision(result);
         } else {
             return this.#curToken;
         }
