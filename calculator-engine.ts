@@ -51,46 +51,66 @@ class CalculatorTokenizer {
     }
 
     serialize(char: string): void {
+        // digit
         if (/[0-9]/.test(char)) {
+
+            // start a new numeric value
             if (this.#expectNewInput) {
                 this.#curToken = char;
                 this.#expectNewInput = false;
+
+            // or replace the current 0
             } else if (this.#curToken === '0') {
                 this.#curToken = char;
+
+            // or concat with the current value
             } else {
                 this.#curToken += char;
             }
+
+        // decimal dot
         } else if (char === '.') {
+
+            // add an implicit 0
             if (this.#expectNewInput) {
                 this.#curToken = '0.';
                 this.#expectNewInput = false;
+
+            // or add the dot to existing value
             } else if (!this.#curToken.includes('.')) {
                 this.#curToken += '.';
+
+            // or throw? when there's already a dot
             } else {
+                // ToDo: Just ignore?
                 throw `${this.constructor.name}: Attempt to add a second decimal dot in the same number`;
             }
+
+        // equal sign: calculate result
         } else if (char === '=') {
-            // TODO: Handle subsequent '=' (repeating last operation)
+            // ToDo: Handle subsequent '=' (repeating last operation)
 
             this.#curToken = this.#performOperation();
             this.#prevToken = '';
             this.#operation = '';
             this.#expectNewInput = true;
-        } else if (Object.keys(CalculatorTokenizer.#operationsMap).includes(char)) {
-            // TODO: Handle subsequent operators (replacing operation)
 
+        // binary operator
+        } else if (char in CalculatorTokenizer.#operationsMap) {
+            // ToDo: Handle subsequent operators (replacing operation)
+
+            // calculate temporary result if needed
             if (this.#operation) {
                 this.#curToken = this.#performOperation();
-                this.#prevToken = this.#curToken;
-                this.#operation = CalculatorTokenizer.#operationsMap[char];
-                this.#expectNewInput = true;
-            } else {
-                this.#prevToken = this.#curToken;
-                this.#operation = CalculatorTokenizer.#operationsMap[char];
-                this.#expectNewInput = true;
             }
+
+            this.#prevToken = this.#curToken;
+            this.#operation = CalculatorTokenizer.#operationsMap[char];
+            this.#expectNewInput = true;
+
         } else {
-            throw `${this.constructor.name}: Unrecognized character`;
+            const errorMsg = `${this.constructor.name}: Unrecognized input`;
+            alert(errorMsg);
         }
     }
 }
