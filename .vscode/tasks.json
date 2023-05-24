@@ -17,6 +17,16 @@
 			"label": "tsc: build - tsconfig.json"
 		},
 		{
+			"type": "typescript",
+			"tsconfig": "tsconfig.json",
+			"option": "watch",
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"group": "build",
+			"label": "tsc: watch - tsconfig.json"
+		},
+		{
 			"label": "Compile SCSS",
 			"type": "shell",
 			"command": "npx sass -w .:.",
@@ -26,7 +36,7 @@
 			},
 			"runOptions": {
 				"runOn": "folderOpen"
-			},
+			}
 		},
 		{
 			"label": "Start development server",
