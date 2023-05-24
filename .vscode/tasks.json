@@ -11,15 +11,33 @@
 				"kind": "build",
 				"isDefault": true
 			},
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
 			"label": "tsc: build - tsconfig.json"
 		},
 		{
 			"label": "Compile SCSS",
 			"type": "shell",
-			"command": "npx sass calculator.scss calculator.css",
+			"command": "npx sass -w .:.",
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			},
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+		},
+		{
+			"label": "Start development server",
+			"type": "shell",
+			"command": "cmd \"/c py -m http.server\" | start http://localhost:8000",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"runOptions": {
+				"runOn": "folderOpen"
 			}
 		}
 	]
