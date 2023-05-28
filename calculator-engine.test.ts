@@ -31,4 +31,18 @@ describe('single value inputs', () => {
     test('ignores multiple zeroes', () => {
         testPattern(['0', '0', '0'], '0');
     });
+
+    test.failing('limits to 10 digits', () => {
+        testPattern(
+            ['2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2'],
+            '2222222222'
+        );
+    });
+
+    test.failing('limits to 10 digits - decimal', () => {
+        testPattern(
+            ['2', '2', '2', '2', '2', '2', '.', '2', '2', '2', '2', '2', '2', '2'],
+            '222222.2222'
+        );
+    });
 });
