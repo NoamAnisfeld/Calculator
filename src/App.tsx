@@ -1,12 +1,12 @@
 import './App.css'
+import { CalculatorWidget } from './components/CalculatorWidget'
 
 function App() {
 
     return (
-        <h1>
-            Hello World
-        </h1>
+        <CalculatorWidget />
     )
 }
 
 export default App
+
