@@ -193,46 +193,6 @@ function processInputAfterOperator(state: CalculatorState & { inputStage: "opera
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function processInputAfterResult(state: CalculatorState & { inputStage: "result" }, input: ValidInput): CalculatorState {
     switch (input) {
         case "C":

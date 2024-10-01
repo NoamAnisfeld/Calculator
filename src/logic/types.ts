@@ -21,6 +21,7 @@ interface BaseCalculatorState {
     hiddenOperand: string | null; // allows repeating last operation even though currentValue was changed
     activeOperator: Operator | null;
 }
+
 type CalculatorState = BaseCalculatorState & (
     {
         inputStage: "initial",
