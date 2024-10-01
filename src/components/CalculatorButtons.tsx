@@ -1,4 +1,4 @@
-import { ValidInput } from "../types/types";
+import { ValidInput } from "../logic/types";
 
 type CalculatorButtonsProps = {
     onButtonClicked: (input: ValidInput) => void;

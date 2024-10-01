@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CalculatorButtons } from "./CalculatorButtons";
 import { CalculatorContainer } from "./CalculatorContainer";
 import { CalculatorDisplay } from "./CalculatorDisplay";
-import { ValidInput } from "../types/types";
+import { ValidInput } from "../logic/types";
 
 export function CalculatorWidget() {
 
