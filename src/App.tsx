@@ -1,10 +1,13 @@
-import './App.css'
+import { Grid } from '@radix-ui/themes'
 import { CalculatorWidget } from './components/CalculatorWidget'
+import './App.css'
 
 function App() {
 
     return (
-        <CalculatorWidget />
+        <Grid style={{ minHeight: "inherit" }} justify="center" align="center">
+            <CalculatorWidget />
+        </Grid>
     )
 }
 

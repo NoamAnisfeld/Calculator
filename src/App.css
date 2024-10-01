@@ -4,3 +4,37 @@
   display: grid;
   place-items: center;
 }
+
+.text-monospace {
+  font-family: monospace;
+}
+
+.calculator-container {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.calculator-display {
+  border: 0.5px solid;
+  text-wrap: nowrap;
+}
+
+.calculator-button-grid {
+  grid-template-areas:
+    "C   .    .       divide"
+    "d7  d8   d9      multiply"
+    "d4  d5   d6      substract"
+    "d1  d2   d3      add"
+    "d0  dot  result  add"
+  ;
+
+  && {
+    grid-template-columns: repeat(4, 2em);
+    grid-template-rows: repeat(5, 2em);
+  }
+  
+  button {
+    font-size: large;
+    width: 100%;
+    height: 100%;
+  }
+}
