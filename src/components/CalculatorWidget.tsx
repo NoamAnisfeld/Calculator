@@ -2,19 +2,20 @@ import { useState } from "react";
 import { CalculatorButtons } from "./CalculatorButtons";
 import { CalculatorContainer } from "./CalculatorContainer";
 import { CalculatorDisplay } from "./CalculatorDisplay";
-import { ValidInput } from "../logic/types";
+import { CalculatorState, ValidInput } from "../logic/types";
+import { initialState, processInput } from "../logic/calculatorLogic";
 
 export function CalculatorWidget() {
 
-    const [currentValue, setCurrentValue] = useState("0");
+    const [calculatorState, setCalculatorState] = useState<CalculatorState>(initialState());
 
     function handleInput(input: ValidInput) {
-        setCurrentValue(oldValue => oldValue + input);
+        setCalculatorState(processInput(calculatorState, input));
     }
 
     return (
         <CalculatorContainer>
-            <CalculatorDisplay value={currentValue} />
+            <CalculatorDisplay value={calculatorState.currentValue} />
             <CalculatorButtons onButtonClicked={handleInput} />
         </CalculatorContainer>
     );
