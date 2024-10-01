@@ -67,10 +67,15 @@ describe("calculator test cases", () => {
         testInputSequence(["1", "-", "2", "="], "-1");
         testInputSequence(["1", "*", "5", "="], "5");
         testInputSequence(["1", "0", "/", "5", "="], "2");
-    })
+    });
 
     test("multi-step operations", () => {
         testInputSequence(["1", "+", "1", "+", "1", "=",], "3");
         testInputSequence(["1", "-", "3", "*", "3", "=",], "-6");
-    })
+    });
+
+    test("consequentive calculations on recieved result", () => {
+        testInputSequence(["1", "+", "1", "=", "+"], "2");
+        testInputSequence(["1", "+", "1", "=", "+", "1", "=",], "3");
+    });
 });

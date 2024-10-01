@@ -214,8 +214,9 @@ function processInputAfterResult(state: CalculatorState & { inputStage: "result"
         case "*":
         case "/":
             return {
-                ...initialState(),
+                ...state,
                 activeOperator: input,
+                hiddenOperand: null,
                 inputStage: "operatorSelected",
             }
         case "=":
