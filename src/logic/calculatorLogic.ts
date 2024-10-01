@@ -108,11 +108,21 @@ function processValueInput(state: CalculatorState & { inputStage: "valueInput" }
         case "-":
         case "*":
         case "/":
-            return {
-                ...state,
-                activeOperator: input,
-                inputStage: "operatorSelected",
-            }
+            return (state.previousValue && state.activeOperator
+                ? {
+                    ...state,
+                    currentValue: calculateResultWithLimitedDigits(
+                        state.previousValue, state.currentValue, state.activeOperator
+                    ),
+                    activeOperator: input,
+                    inputStage: "operatorSelected",
+                }
+                : {
+                    ...state,
+                    activeOperator: input,
+                    inputStage: "operatorSelected",
+                }
+            )
         case "=":
             return (state.previousValue && state.activeOperator
                 ? {

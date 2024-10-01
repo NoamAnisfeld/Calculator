@@ -69,4 +69,9 @@ describe("calculator test cases", () => {
         testInputSequence(["1", "*", "5", "="], "5");
         testInputSequence(["1", "0", "/", "5", "="], "2");
     })
+
+    test("multi-step operations", () => {
+        testInputSequence(["1", "+", "1", "+", "1", "=",], "3");
+        testInputSequence(["1", "-", "3", "*", "3", "=",], "-6");
+    })
 });
