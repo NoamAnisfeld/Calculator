@@ -15,7 +15,12 @@ export function CalculatorWidget() {
 
     return (
         <CalculatorContainer>
-            <CalculatorDisplay value={calculatorState.currentValue} />
+            <CalculatorDisplay value={
+                calculatorState.inputStage !== "error"
+                    ? calculatorState.currentValue
+                    : "Error"
+                }
+            />
             <CalculatorButtons onButtonClicked={handleInput} />
         </CalculatorContainer>
     );
