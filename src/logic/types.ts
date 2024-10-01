@@ -20,7 +20,6 @@ interface BaseCalculatorState {
     previousValue: string | null;
     hiddenOperand: string | null; // allows repeating last operation even though currentValue was changed
     activeOperator: Operator | null;
-    // result: string | null;
 }
 type CalculatorState = BaseCalculatorState & (
     {
@@ -28,24 +27,14 @@ type CalculatorState = BaseCalculatorState & (
         currentValue: "0",
         previousValue: null,
         activeOperator: null,
-        // result: null
     } | {
         inputStage: "valueInput",
-        // activeOperator: null,
-        // result: null
     } | {
         inputStage: "operatorSelected",
         activeOperator: Operator,
-        // result: null
-    // } | {
-    //     inputStage: "valueInput"
-    //     activeOperator: Operator,
-    //     // result: null
     } | {
         inputStage: "result",
         previousValue: null,
-        // activeOperator: Operator,
-        // result: string,
     } | {
         inputStage: "error",
     }

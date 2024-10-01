@@ -14,7 +14,6 @@ function initialState(): CalculatorState & { inputStage: "initial" } {
         previousValue: null,
         hiddenOperand: null,
         activeOperator: null,
-        // result: null
     }
 }
 
@@ -194,47 +193,45 @@ function processInputAfterOperator(state: CalculatorState & { inputStage: "opera
     }
 }
 
-// function processSecondOperandInput(state: CalculatorState & { inputStage: "valueInput" }, input: ValidInput): CalculatorState {
-//     switch (input) {
-//         case "C":
-//             return initialState();
-//         case "0":
-//         case "1":
-//         case "2":
-//         case "3":
-//         case "4":
-//         case "5":
-//         case "6":
-//         case "7":
-//         case "8":
-//         case "9":
-//             return {
-//                 ...state,
-//                 currentValue: extendValueWithDigitsLimit(state.currentValue, input),
-//             }
-//         case ".":
-//             return {
-//                 ...state,
-//                 currentValue: state.currentValue.includes(".") ? state.currentValue : state.currentValue + ".",
-//             }
-//         case "=":
-//             return {
-//                 ...state,
-//                 result: calculateResultWithLimitedDigits(state),
-//                 inputStage: "result",
-//             }
-//         case "+":
-//         case "-":
-//         case "*":
-//         case "/":
-//             return {
-//                 ...initialState(),
-//                 previousValue: calculateResultWithLimitedDigits(state),
-//                 activeOperator: input,
-//                 inputStage: "operatorSelected",
-//             }
-//     }
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function processInputAfterResult(state: CalculatorState & { inputStage: "result" }, input: ValidInput): CalculatorState {
     switch (input) {

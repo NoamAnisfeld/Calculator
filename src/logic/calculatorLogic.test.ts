@@ -1,4 +1,3 @@
-// calculatorLogic.test.ts
 import { describe, expect, it, test } from "vitest";
 import { initialState, processInput } from "./calculatorLogic";
 import { CalculatorState, ValidInput } from "./types";
