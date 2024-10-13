@@ -27,7 +27,7 @@
     "d0  dot  result  add"
   ;
 
-  && {
+  &:is(&) {
     grid-template-columns: repeat(4, 2em);
     grid-template-rows: repeat(5, 2em);
   }
