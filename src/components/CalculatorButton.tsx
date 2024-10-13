@@ -38,6 +38,7 @@ export default function CalculatorButton({
 
     return (
         <Button
+            variant="classic"
             key={value}
             onClick={() => clickHandler(value)}
             style={{ gridArea }}
