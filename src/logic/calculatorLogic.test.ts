@@ -1,6 +1,6 @@
+import { initialState } from "./calculatorLogic";
+import { testInputSequence } from "./calculatorLogic.helper.test";
 import { describe, expect, it, test } from "vitest";
-import { initialState, processInput } from "./calculatorLogic";
-import { CalculatorState, ValidInput } from "./types";
 
 describe("correct initial state", () => {
     it("returns correct initial state", () => {
@@ -15,24 +15,42 @@ describe("correct initial state", () => {
     });
 });
 
+describe("initial input", () => {
+
+    test("initial digit input is interepreted correctly", () => {
+        testInputSequence(["0"], { ...initialState(), inputStage: "valueInput", currentValue: "0" }, true);
+        testInputSequence(["1"], { ...initialState(), inputStage: "valueInput", currentValue: "1" }, true);
+        testInputSequence(["2"], { ...initialState(), inputStage: "valueInput", currentValue: "2" }, true);
+        testInputSequence(["3"], { ...initialState(), inputStage: "valueInput", currentValue: "3" }, true);
+        testInputSequence(["4"], { ...initialState(), inputStage: "valueInput", currentValue: "4" }, true);
+        testInputSequence(["5"], { ...initialState(), inputStage: "valueInput", currentValue: "5" }, true);
+        testInputSequence(["6"], { ...initialState(), inputStage: "valueInput", currentValue: "6" }, true);
+        testInputSequence(["7"], { ...initialState(), inputStage: "valueInput", currentValue: "7" }, true);
+        testInputSequence(["8"], { ...initialState(), inputStage: "valueInput", currentValue: "8" }, true);
+        testInputSequence(["9"], { ...initialState(), inputStage: "valueInput", currentValue: "9" }, true);
+    });
+
+    test("a dot can be added to the initial zero", () => {    
+        testInputSequence(["."], { ...initialState(), inputStage: "valueInput", currentValue: "0." }, true);
+    });
+
+    test("a negative sign can be added to the initial zero", () => {
+        testInputSequence(["-"], { ...initialState(), inputStage: "valueInput", currentValue: "-0" }, true);
+    });
+
+    test("an operator other than minus on initial input is applied on the operand zero", () => {
+        testInputSequence(["+"], { ...initialState(), inputStage: "operatorSelected", activeOperator: "+" }, true);
+        testInputSequence(["*"], { ...initialState(), inputStage: "operatorSelected", activeOperator: "*" }, true);
+        testInputSequence(["/"], { ...initialState(), inputStage: "operatorSelected", activeOperator: "/" }, true);
+    })
+  
+    test("the result operation or clear operation as initial input leaves it on inital state", () => {
+        testInputSequence(["="], initialState(), true);
+        testInputSequence(["C"], initialState(), true);
+    });
+})
+
 describe("calculator test cases", () => {
-
-    function testInputSequence(inputSequence: ValidInput[], expectedEndState: string | Partial<CalculatorState>) {
-
-        const matcher: Partial<CalculatorState> = typeof expectedEndState === "string"
-            ? {
-                currentValue: expectedEndState,
-            }
-            : expectedEndState;
-
-        const endState: CalculatorState = inputSequence.reduce(
-            (previousState: CalculatorState, input) =>
-                processInput(previousState, input),
-            initialState()
-        );
-
-        expect(endState).toMatchObject(matcher);
-    }
 
     test("single digit", () => {
         testInputSequence(["0"], "0");
