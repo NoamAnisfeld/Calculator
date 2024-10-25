@@ -20,7 +20,7 @@ function extendValueWithDigitsLimit(operand: string, input: Digit | DecimalDot):
         return `-${input}`;
     }
 
-    if (operand.replace(/[.-]/, "").length >= MAX_DIGITS) {
+    if (operand.replace(/[.-]/g, "").length >= MAX_DIGITS) {
         return operand;
     }
 
