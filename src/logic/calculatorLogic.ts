@@ -225,7 +225,7 @@ function processInputAfterResult(state: CalculatorState & { inputStage: "result"
                 ? {
                     ...state,
                     currentValue: calculateResultWithLimitedDigits(
-                        state.hiddenOperand, state.currentValue, state.activeOperator
+                        state.currentValue, state.hiddenOperand, state.activeOperator
                     ),
                     inputStage: "result",
                 }
