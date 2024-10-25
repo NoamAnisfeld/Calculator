@@ -145,10 +145,92 @@ describe("old test cases which weren't expanded yet", () => {
 // - positive overflow
 // - negative overflow
 
-// ToDo: Test cases for ignored keys
-// - leading zeroes are ignored
-// - digits or dot beyond the allowed length are ignored
-// - second dot is ignored
+describe("ignored keys", () => {
+
+    test("leading zeroes are ignored", () => {
+        testInputSequence(
+            ["0", "0", "0", "1",  "2",   "3"],
+            ["0", "0", "0", "1", "12", "123"],
+        );
+    });
+
+    test("leading zeroes are ignored on negative number", () => {
+        testInputSequence(
+            [ "-",  "0",  "0",  "1",   "2",    "3"],
+            ["-0", "-0", "-0", "-1", "-12", "-123"],
+        );
+    });
+
+    test("leading zeroes are ignored on fraction", () => {
+        testInputSequence(
+            ["0", "0",  ".",   "1",    "2"],
+            ["0", "0", "0.", "0.1", "0.12"],
+        );
+    });
+
+    test("leading zeroes are ignored on negative fraction", () => {
+        testInputSequence(
+            [ "-",  "0",  "0",   ".",    "1",     "2"],
+            ["-0", "-0", "-0", "-0.", "-0.1", "-0.12"],
+        );
+    });
+
+    test("11th digit is ignored", () => {
+        testInputSequence(
+            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1"],
+            "1234567890",
+        );
+    });
+
+    test("11th digit is ignored on negative number", () => {
+        testInputSequence(
+            ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1"],
+            "-1234567890",
+        );
+    });
+
+    test("11th digit is ignored on decimal number", () => {
+        testInputSequence(
+            ["0", ".", "1", "2", "3", "4", "5", "6", "7", "8", "9", "1"],
+            "0.123456789",
+        );
+    });
+
+    test("11th digit is ignored on negative decimal number", () => {
+        testInputSequence(
+            ["-", "0", ".", "1", "2", "3", "4", "5", "6", "7", "8", "9", "1"],
+            "-0.123456789",
+        );
+    });
+
+    test("trailing dot is ignored", () => {
+        testInputSequence(
+            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."],
+            "1234567890",
+        );
+    });
+
+    test("trailing dot is ignored on negative number", () => {
+        testInputSequence(
+            ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."],
+            "-1234567890",
+        );
+    });
+
+    test("second dot is ignored on negative number", () => {
+        testInputSequence(
+            ["1", "2", "3", ".", "4", "5", "6", "."],
+            "123.456",
+        );
+    });
+
+    test("second dot is ignored on negative number", () => {
+        testInputSequence(
+            ["-", "1", "2", "3", ".", "4", "5", "6", "."],
+            "-123.456",
+        );
+    });
+});
 
 // ToDo: Test cases for special situations
 // - operator can be replaced (except by "-")
