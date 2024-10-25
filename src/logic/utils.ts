@@ -8,6 +8,15 @@ export {
 }
 
 function extendValueWithDigitsLimit(operand: string, input: Digit | DecimalDot): string {
+
+    if (operand.replace(/[.-]/g, "").length >= MAX_DIGITS) {
+        return operand;
+    }
+
+    if (operand.replace(/[.-]/g, "").length === MAX_DIGITS && input === ".") {
+        return operand;
+    }
+
     if (input === ".") {
         return operand.includes(".") ? operand : operand + input;
     }
@@ -18,10 +27,6 @@ function extendValueWithDigitsLimit(operand: string, input: Digit | DecimalDot):
 
     if (operand === "-0") {
         return `-${input}`;
-    }
-
-    if (operand.replace(/[.-]/g, "").length >= MAX_DIGITS) {
-        return operand;
     }
 
     return operand + input;
