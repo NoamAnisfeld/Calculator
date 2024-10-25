@@ -20,6 +20,15 @@ export function CalculatorWidget() {
                     ? calculatorState.currentValue
                     : "Error"
                 }
+                activeOperator={
+                    {
+                        "+": "+",
+                        "-": "-",
+                        "*": "x",
+                        "/": "÷",
+                        "none": "",
+                    }[(calculatorState.inputStage !== "result" && calculatorState.activeOperator) || "none"]
+                }
             />
             <CalculatorButtons onButtonClicked={handleInput} />
         </CalculatorContainer>
