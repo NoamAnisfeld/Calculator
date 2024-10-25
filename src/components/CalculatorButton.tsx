@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button } from "@radix-ui/themes";
+import { Button, Text } from "@radix-ui/themes";
 import { ValidInput } from "../logic/types";
 
 interface CalculatorButtonProps {
@@ -43,7 +43,9 @@ export default function CalculatorButton({
             onClick={() => clickHandler(value)}
             style={{ gridArea }}
         >
-            {children}
+            <Text size="4">
+                {children}
+            </Text>
         </Button>
     );
 }

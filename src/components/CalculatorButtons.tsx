@@ -11,7 +11,7 @@ export function CalculatorButtons({
 }: CalculatorButtonsProps) {
 
     return (
-        <Grid columns="4" gap="2" className="calculator-button-grid">
+        <Grid columns="4" gap="2" className="calculator-button-grid" justify="between">
             <CalculatorButton value="0" clickHandler={onButtonClicked} keyboardKeys={["0"]}                gridArea="d0">        0 </CalculatorButton>
             <CalculatorButton value="1" clickHandler={onButtonClicked} keyboardKeys={["1"]}                gridArea="d1">        1 </CalculatorButton>
             <CalculatorButton value="2" clickHandler={onButtonClicked} keyboardKeys={["2"]}                gridArea="d2">        2 </CalculatorButton>
